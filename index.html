@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aryan Kumar | COMPUTER SCIENCE ENGINEERING</title>
+    <link rel="stylesheet" href="css/core.css">
+</head>
+<body>
+    <div class="noise-overlay"></div>
+    <div id="cursor-light"></div>
+    <div class="flashlight-layer"></div> <div class="scanline"></div>
+    
+    <nav>
+        <div class="identity">
+            <h1 id="typewriter-text" class="typing-cursor glitch-hover"></h1>
+            <p id="mode-label">INITIALIZING...</p>
+        </div>
+        
+        <div class="controls">
+            <button id="btn-eng">[ ENGINEERING ]</button>
+            <button id="btn-vfx">[ VFX / EDIT ]</button>
+            <button id="btn-contact">[ CONTACT ]</button> <a id="resume-btn" href="#" target="_blank" class="resume-link">[ DOWNLOAD RESUME ]</a>
+        </div>
+    </nav>
+
+    <div class="main-stage">
+        <main id="content-area">
+            </main>
+
+        <aside class="reactor-container">
+            <div class="reactor">
+                <div class="circle outer"></div>
+                <div class="circle inner"></div>
+                <div class="core"></div>
+            </div>
+        </aside>
+    </div>
+    
+    <div id="contact-modal" class="modal-overlay hidden">
+        <div class="modal-window">
+            <div class="modal-header">
+                <span>>> SECURE_UPLINK</span>
+                <button id="close-contact">[ X ]</button>
+            </div>
+            <div class="modal-body" id="contact-content">
+            </div>
+        </div>
+    </div>
+
+    <footer class="system-status">
+        <div class="left">
+            <span class="status-light"></span>SYSTEM: ONLINE
+        </div>
+        <div class="right">
+            POS: <span id="cursor-pos">X:000 Y:000</span> :: LOC: DEL :: <span id="clock">00:00:00</span>
+        </div>
+    </footer>
+
+    <script src="js/data.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
