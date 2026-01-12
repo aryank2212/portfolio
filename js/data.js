@@ -27,20 +27,20 @@ const engineeringData = [
 
 const vfxData = [
     {
-        title: "Atmospheric Horror Concept",
+        title: "Empowering Tomorrow",
         role: "Editor / Compositor",
-        desc: "Color grading and sound design inspired by 'True Detective' aesthetics.",
-        tools: ["After Effects", "DaVinci Resolve"],
+        desc: "Reel on Empowering the young students from villages.",
+        tools: ["After Effects", "Priemere Pro"],
         image: "assets/vfx/project1_thumb.jpg", 
-        link: "https://youtube.com/..."
+        link: "https://drive.google.com/file/d/1IItSDU-MV_NThhI207Y9isYetKMR06W7/view?usp=sharing"
     },
     {
-        title: "Combat Sim Cinematics",
-        role: "Director",
-        desc: "High-fidelity flight recording and editing using DCS World replay systems.",
-        tools: ["DCS World", "Premiere Pro"],
+        title: "GTR || EDIT",
+        role: "Editor / Compositor / VFX Artist",
+        desc: "Edit of a sports car GTR .",
+        tools: ["After Effects", "Premiere Pro"],
         image: "assets/vfx/project2_thumb.jpg",
-        link: "https://youtube.com/..."
+        link: "https://youtu.be/QOnZ2J06NbI"
     }
 ];
 
