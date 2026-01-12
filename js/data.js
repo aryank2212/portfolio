@@ -41,14 +41,6 @@ const vfxData = [
         tools: ["After Effects", "Priemere Pro"],
         image: "assets/vfx/project1_thumb.jpg", 
         link: "https://drive.google.com/file/d/1IItSDU-MV_NThhI207Y9isYetKMR06W7/view?usp=sharing"
-    },
-    }
-        title: "GTR || EDIT",
-        role: "Editor / Compositor / VFX Artist",
-        desc: "Edit of a sports car GTR .",
-        tools: ["After Effects", "Premiere Pro"],
-        image: "assets/vfx/project2_thumb.jpg",
-        link: "https://youtu.be/QOnZ2J06NbI"
     }
 ];
 
