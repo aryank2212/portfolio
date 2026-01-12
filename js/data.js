@@ -27,6 +27,14 @@ const engineeringData = [
 
 const vfxData = [
     {
+        title: "Portfolio",
+        role: "Editor / Compositor",
+        desc: "My Portfolio, showcasing my journey and experience as an editor till date.",
+        tools: ["After Effects", "Priemere Pro"],
+        image: "assets/vfx/project1_thumb.jpg", 
+        link: "https://drive.google.com/drive/folders/1mBeqyZXw7U6-PZ-nMQgfzfZwjknV3V_B"
+    },
+    {
         title: "Empowering Tomorrow",
         role: "Editor / Compositor",
         desc: "Reel on Empowering the young students from villages.",
@@ -34,7 +42,7 @@ const vfxData = [
         image: "assets/vfx/project1_thumb.jpg", 
         link: "https://drive.google.com/file/d/1IItSDU-MV_NThhI207Y9isYetKMR06W7/view?usp=sharing"
     },
-    {
+    }
         title: "GTR || EDIT",
         role: "Editor / Compositor / VFX Artist",
         desc: "Edit of a sports car GTR .",
