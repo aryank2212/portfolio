@@ -47,7 +47,7 @@ const vfxData = [
 // CONTACT DATA (NEW)
 const contactInfo = {
     email: "ak24682212@gmail.com",
-    linkedin: "https://www.linkedin.com/in/aryan-kumar-rajput-13b308343/e",
+    linkedin: "https://www.linkedin.com/in/aryan-kumar-rajput-13b308343/",
     github: "https://github.com/aryank2212",
     location: "New Delhi, India"
 };
