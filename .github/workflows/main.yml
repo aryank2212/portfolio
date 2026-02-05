@@ -13,18 +13,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Prepare SSH key
+      - name: Recreate SSH key
         run: |
           echo "$EC2_SSH_KEY_B64" | base64 -d > /tmp/ec2_key
           chmod 600 /tmp/ec2_key
         env:
           EC2_SSH_KEY_B64: ${{ secrets.EC2_SSH_KEY_B64 }}
-           - name: Debug SSH key file
-        run: |
-          ls -l /tmp/ec2_key || echo "key file missing"
-          wc -c /tmp/ec2_key || echo "cannot read key file"
 
-      - name: Deploy via native SSH
+      - name: Deploy via SSH
         run: |
           rsync -avz --delete \
             -e "ssh -i /tmp/ec2_key -o StrictHostKeyChecking=no" \
@@ -38,4 +34,3 @@ jobs:
             sudo chmod -R 755 /var/www/html
             rm -rf /tmp/site
           EOF
-
