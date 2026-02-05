@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 const engineeringData = [
     {
         year: "\n2025\n",
@@ -51,3 +52,58 @@ const contactInfo = {
     github: "https://github.com/aryank2212",
     location: "New Delhi, India"
 };
+=======
+const engineeringData = [
+    {
+        year: "\n2025\n",
+        title: "Hierarchical Multi-Agent Framework",
+        tag: "\nAI Research paper\n",
+        desc: "Proposed a sovereign AI architecture for sustainable software development, minimizing token usage via specialized agent roles.",
+        tech: ["LLMs", "Python", "System Design"],
+        link: "https://github.com/aryank2212/A-Hierarchical-Multi-Agent-Framework-for-Sustainable-and-Autonomous-Software-Development"
+    },
+    {
+        year: "2026",
+        title: "N-Body Gravitational Simulation",
+        tag: "\nC & Physics",
+        desc: "A simple N-body gravitational simulation written in C using Newtonian mechanics.",
+        tech: ["C", "Physics"],
+        link: "https://github.com/aryank2212/n-body-simulation-c"
+    },
+    {
+        year: "2026",
+        title: "Double Pendulum Simulation",
+        tag: "\nC & Python",
+        desc: "A numerical simulation of a double pendulum.",
+        tech: ["C", "Physics", "Python"],
+        link: "https://github.com/aryank2212/double-pendulum-c"
+    }
+];
+
+const vfxData = [
+    {
+        title: "Atmospheric Horror Concept",
+        role: "Editor / Compositor",
+        desc: "Color grading and sound design inspired by 'True Detective' aesthetics.",
+        tools: ["After Effects", "DaVinci Resolve"],
+        image: "assets/vfx/project1_thumb.jpg", 
+        link: "https://youtube.com/..."
+    },
+    {
+        title: "Combat Sim Cinematics",
+        role: "Director",
+        desc: "High-fidelity flight recording and editing using DCS World replay systems.",
+        tools: ["DCS World", "Premiere Pro"],
+        image: "assets/vfx/project2_thumb.jpg",
+        link: "https://youtube.com/..."
+    }
+];
+
+// CONTACT DATA (NEW)
+const contactInfo = {
+    email: "ak24682212@gmail.com",
+    linkedin: "https://www.linkedin.com/in/aryan-kumar-rajput-13b308343/",
+    github: "https://github.com/aryank2212",
+    location: "New Delhi, India"
+};
+>>>>>>> Stashed changes
