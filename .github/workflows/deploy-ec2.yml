@@ -1,3 +1,9 @@
+name: Deploy Static Portfolio to EC2
+
+on:
+  push:
+    branches:
+      - main
 - name: Prepare SSH key
   run: |
     echo "$EC2_SSH_KEY_B64" | base64 -d > /tmp/ec2_key
