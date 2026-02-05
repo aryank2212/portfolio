@@ -20,17 +20,30 @@ jobs:
         env:
           EC2_SSH_KEY_B64: ${{ secrets.EC2_SSH_KEY_B64 }}
 
-      - name: Deploy via SSH
+            - name: Debug runner files
         run: |
+          pwd
+          ls -lah
+
+      - name: Deploy via SSH (verified)
+        run: |
+          ssh -i /tmp/ec2_key -o StrictHostKeyChecking=no deploy@${{ secrets.EC2_HOST }} "mkdir -p /tmp/site"
+
           rsync -avz --delete \
             -e "ssh -i /tmp/ec2_key -o StrictHostKeyChecking=no" \
             index.html 404.html css js assets \
-            deploy@${{ secrets.EC2_HOST }}:/tmp/site
+            deploy@${{ secrets.EC2_HOST }}:/tmp/site/
 
           ssh -i /tmp/ec2_key -o StrictHostKeyChecking=no deploy@${{ secrets.EC2_HOST }} << 'EOF'
+            echo "Contents of /tmp/site:"
+            ls -lah /tmp/site || true
+
             sudo rm -rf /var/www/html/*
             sudo cp -r /tmp/site/* /var/www/html/
+
+            echo "Contents of /var/www/html:"
+            ls -lah /var/www/html || true
+
             sudo chown -R www-data:www-data /var/www/html
             sudo chmod -R 755 /var/www/html
-            rm -rf /tmp/site
           EOF
