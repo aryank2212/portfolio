@@ -20,16 +20,18 @@ jobs:
         env:
           EC2_SSH_KEY_B64: ${{ secrets.EC2_SSH_KEY_B64 }}
 
-      - name: Deploy site files to EC2
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: deploy
-          key_path: /tmp/ec2_key
-          script: |
+      - name: Deploy via native SSH
+        run: |
+          rsync -avz --delete \
+            -e "ssh -i /tmp/ec2_key -o StrictHostKeyChecking=no" \
+            index.html 404.html css js assets \
+            deploy@${{ secrets.EC2_HOST }}:/tmp/site
+
+          ssh -i /tmp/ec2_key -o StrictHostKeyChecking=no deploy@${{ secrets.EC2_HOST }} << 'EOF'
             sudo rm -rf /var/www/html/*
-            sudo cp index.html 404.html /var/www/html/
-            sudo cp -r css js assets /var/www/html/
+            sudo cp -r /tmp/site/* /var/www/html/
             sudo chown -R www-data:www-data /var/www/html
-            sudo chmod -R 755 /var/www
+            sudo chmod -R 755 /var/www/html
+            rm -rf /tmp/site
+          EOF
 
