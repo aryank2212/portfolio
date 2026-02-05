@@ -15,14 +15,14 @@ jobs:
 
       - name: Recreate SSH key
         run: |
-          echo "$EC2_SSH_KEY_B64" | base64 -d > /tmp/ec2_key
+          echo "${{ secrets.EC2_SSH_KEY_B64 }}" | base64 -d > /tmp/ec2_key
           chmod 600 /tmp/ec2_key
-        env:
-          EC2_SSH_KEY_B64: ${{ secrets.EC2_SSH_KEY_B64 }}
 
-            - name: Debug runner files
+      - name: Debug runner files
         run: |
+          echo "Runner working directory:"
           pwd
+          echo "Files in repo:"
           ls -lah
 
       - name: Deploy via SSH (verified)
@@ -31,8 +31,10 @@ jobs:
 
           rsync -avz --delete \
             -e "ssh -i /tmp/ec2_key -o StrictHostKeyChecking=no" \
-            index.html 404.html css js assets \
-            deploy@${{ secrets.EC2_HOST }}:/tmp/site/
+            ./ \
+            deploy@${{ secrets.EC2_HOST }}:/tmp/site \
+            --exclude .git \
+            --exclude .github
 
           ssh -i /tmp/ec2_key -o StrictHostKeyChecking=no deploy@${{ secrets.EC2_HOST }} << 'EOF'
             echo "Contents of /tmp/site:"
@@ -46,4 +48,6 @@ jobs:
 
             sudo chown -R www-data:www-data /var/www/html
             sudo chmod -R 755 /var/www/html
+            rm -rf /tmp/site
           EOF
+
