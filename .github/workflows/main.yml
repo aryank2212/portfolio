@@ -19,6 +19,10 @@ jobs:
           chmod 600 /tmp/ec2_key
         env:
           EC2_SSH_KEY_B64: ${{ secrets.EC2_SSH_KEY_B64 }}
+           - name: Debug SSH key file
+        run: |
+          ls -l /tmp/ec2_key || echo "key file missing"
+          wc -c /tmp/ec2_key || echo "cannot read key file"
 
       - name: Deploy via native SSH
         run: |
