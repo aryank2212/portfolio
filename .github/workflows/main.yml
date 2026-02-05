@@ -1,1 +1,35 @@
+name: Deploy Static Portfolio to EC2
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Prepare SSH key
+        run: |
+          echo "$EC2_SSH_KEY_B64" | base64 -d > /tmp/ec2_key
+          chmod 600 /tmp/ec2_key
+        env:
+          EC2_SSH_KEY_B64: ${{ secrets.EC2_SSH_KEY_B64 }}
+
+      - name: Deploy site files to EC2
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: deploy
+          key_path: /tmp/ec2_key
+          script: |
+            sudo rm -rf /var/www/html/*
+            sudo cp index.html 404.html /var/www/html/
+            sudo cp -r css js assets /var/www/html/
+            sudo chown -R www-data:www-data /var/www/html
+            sudo chmod -R 755 /var/www
 
