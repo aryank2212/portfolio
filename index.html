@@ -1,32 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aryan Kumar | COMPUTER SCIENCE ENGINEERING</title>
     <link rel="stylesheet" href="css/core.css">
 </head>
+
 <body>
     <div class="noise-overlay"></div>
     <div id="cursor-light"></div>
-    <div class="flashlight-layer"></div> <div class="scanline"></div>
-    
+    <div class="flashlight-layer"></div>
+    <div class="scanline"></div>
+
     <nav>
-        <div class="identity">
-            <h1 id="typewriter-text" class="typing-cursor glitch-hover"></h1>
-            <p id="mode-label">INITIALIZING...</p>
+        <div class="nav-top">
+            <div class="identity">
+                <h1 id="typewriter-text" class="typing-cursor glitch-hover"></h1>
+                <p id="mode-label">INITIALIZING...</p>
+            </div>
+            <button class="hamburger" id="hamburger" aria-label="Menu">
+                <span></span><span></span><span></span>
+            </button>
         </div>
-        
-        <div class="controls">
+
+        <div class="controls" id="nav-controls">
             <button id="btn-eng">[ ENGINEERING ]</button>
             <button id="btn-vfx">[ VFX / EDIT ]</button>
-            <button id="btn-contact">[ CONTACT ]</button> <a id="resume-btn" href="#" target="_blank" class="resume-link">[ DOWNLOAD RESUME ]</a>
+            <button id="btn-tools">[ TOOLS ]</button>
+            <button id="btn-contact">[ CONTACT ]</button>
+            <a id="resume-btn" href="#" target="_blank" class="resume-link">[ DOWNLOAD RESUME ]</a>
         </div>
     </nav>
 
     <div class="main-stage">
         <main id="content-area">
-            </main>
+        </main>
 
         <aside class="reactor-container">
             <div class="reactor">
@@ -36,7 +46,7 @@
             </div>
         </aside>
     </div>
-    
+
     <div id="contact-modal" class="modal-overlay hidden">
         <div class="modal-window">
             <div class="modal-header">
@@ -60,4 +70,5 @@
     <script src="js/data.js"></script>
     <script src="js/app.js"></script>
 </body>
+
 </html>

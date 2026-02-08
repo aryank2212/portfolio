@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>N-Body Simulation | Aryan Kumar</title>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime&family=Inter:wght@400;600&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #050505;
+            --accent: #00d4ff;
+            --accent-dim: rgba(0, 212, 255, 0.3);
+            --text-main: #e0e0e0;
+            --text-dim: #777;
+            --font-mono: 'Courier Prime', monospace;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            padding: 1rem 2rem;
+            border-bottom: 1px solid #222;
+            background: rgba(5, 5, 5, 0.9);
+            backdrop-filter: blur(5px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .title {
+            font-family: var(--font-mono);
+            color: var(--accent);
+            font-size: 0.9rem;
+        }
+
+        .back-btn {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            border: 1px solid #333;
+            padding: 8px 16px;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .container {
+            flex: 1;
+            display: flex;
+            padding: 1rem;
+            gap: 1rem;
+        }
+
+        @media (max-width: 900px) {
+            .container {
+                flex-direction: column;
+            }
+        }
+
+        .canvas-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #canvas {
+            border: 1px solid #333;
+            background: #000;
+            cursor: crosshair;
+            max-width: 100%;
+        }
+
+        .stats {
+            color: var(--accent);
+            margin-top: 1rem;
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .hint {
+            font-size: 0.7rem;
+            color: var(--text-dim);
+            margin-top: 0.5rem;
+            font-family: var(--font-mono);
+        }
+
+        .controls-panel {
+            width: 280px;
+            min-width: 280px;
+            background: rgba(10, 10, 10, 0.8);
+            border: 1px solid #333;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        @media (max-width: 900px) {
+            .controls-panel {
+                width: 100%;
+                min-width: unset;
+                max-height: unset;
+            }
+        }
+
+        .panel-title {
+            font-family: var(--font-mono);
+            color: var(--accent);
+            font-size: 0.8rem;
+            border-bottom: 1px solid #333;
+            padding-bottom: 0.5rem;
+        }
+
+        .control-group {
+            margin-bottom: 0.5rem;
+        }
+
+        .control-group label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            margin-bottom: 4px;
+            font-family: var(--font-mono);
+        }
+
+        .control-group label span {
+            color: var(--accent);
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 4px;
+            background: #333;
+            border-radius: 2px;
+            outline: none;
+            -webkit-appearance: none;
+            cursor: pointer;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 14px;
+            height: 14px;
+            background: var(--accent);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--accent-dim);
+        }
+
+        .btn-row {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        button {
+            background: transparent;
+            border: 1px solid #333;
+            color: var(--text-dim);
+            padding: 8px 14px;
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            flex: 1;
+        }
+
+        button:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        button.active {
+            border-color: var(--accent);
+            color: var(--accent);
+            box-shadow: 0 0 10px var(--accent-dim);
+        }
+
+        .preset-btn {
+            display: block;
+            width: 100%;
+            text-align: left;
+            margin-bottom: 0.3rem;
+            padding: 6px 10px;
+        }
+
+        select {
+            width: 100%;
+            background: #0a0a0a;
+            border: 1px solid #333;
+            color: var(--text-main);
+            padding: 8px;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            cursor: pointer;
+        }
+
+        select:hover {
+            border-color: var(--accent);
+        }
+
+        .color-picker {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 0.5rem;
+        }
+
+        .color-swatch {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .color-swatch:hover,
+        .color-swatch.active {
+            border-color: #fff;
+            transform: scale(1.2);
+        }
+
+        .info {
+            font-size: 0.7rem;
+            color: var(--text-dim);
+            line-height: 1.5;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #222;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <span class="title">>> N_BODY_GRAVITATIONAL_SIMULATION</span>
+        <a href="../index.html" class="back-btn">[ ← BACK ]</a>
+    </header>
+
+    <div class="container">
+        <div class="canvas-section">
+            <canvas id="canvas" width="700" height="550"></canvas>
+            <div class="stats">
+                <span>BODIES: <span id="bodyCount">0</span></span>
+                <span>TIME: <span id="simTime">0.0</span></span>
+                <span>KE: <span id="kineticEnergy">0</span></span>
+            </div>
+            <div class="hint">Click to add body • Right-click to add massive star • Scroll to zoom • Drag to pan</div>
+        </div>
+
+        <div class="controls-panel">
+            <div class="panel-title">>> PHYSICS</div>
+
+            <div class="control-group">
+                <label>Gravity (G) <span id="gVal">1.00</span></label>
+                <input type="range" id="gravity" min="0.1" max="5" value="1" step="0.1">
+            </div>
+            <div class="control-group">
+                <label>Time Scale <span id="timeVal">1.0</span>x</label>
+                <input type="range" id="timeScale" min="0.1" max="3" value="1" step="0.1">
+            </div>
+            <div class="control-group">
+                <label>Softening <span id="softVal">10</span></label>
+                <input type="range" id="softening" min="1" max="50" value="10">
+            </div>
+            <div class="control-group">
+                <label>New Body Mass <span id="massVal">5</span></label>
+                <input type="range" id="newMass" min="1" max="50" value="5">
+            </div>
+
+            <div class="panel-title">>> NEW BODY COLOR</div>
+            <div class="color-picker" id="colorPicker">
+                <div class="color-swatch active" style="background: #00d4ff" data-color="#00d4ff"></div>
+                <div class="color-swatch" style="background: #ff6644" data-color="#ff6644"></div>
+                <div class="color-swatch" style="background: #44ff66" data-color="#44ff66"></div>
+                <div class="color-swatch" style="background: #ffcc00" data-color="#ffcc00"></div>
+                <div class="color-swatch" style="background: #ff44ff" data-color="#ff44ff"></div>
+                <div class="color-swatch" style="background: #ffffff" data-color="#ffffff"></div>
+            </div>
+
+            <div class="panel-title">>> CONTROLS</div>
+            <div class="btn-row">
+                <button id="btn-pause">PAUSE</button>
+                <button id="btn-clear">CLEAR</button>
+            </div>
+            <div class="btn-row">
+                <button id="btn-trails" class="active">TRAILS</button>
+                <button id="btn-vectors">VECTORS</button>
+            </div>
+            <div class="btn-row">
+                <button id="btn-centerMass">CENTER</button>
+                <button id="btn-resetView">RESET VIEW</button>
+            </div>
+
+            <div class="panel-title">>> PRESETS</div>
+            <button class="preset-btn" data-preset="random">🎲 Random System (50)</button>
+            <button class="preset-btn" data-preset="binary">⭐ Binary Stars</button>
+            <button class="preset-btn" data-preset="solar">☀️ Solar System</button>
+            <button class="preset-btn" data-preset="cluster">🌌 Star Cluster</button>
+            <button class="preset-btn" data-preset="collision">💥 Galaxy Collision</button>
+            <button class="preset-btn" data-preset="ring">💍 Ring System</button>
+
+            <div class="info">
+                <strong>N-Body Simulation</strong> - Each body attracts every other via
+                F = G·m₁·m₂/r². Semi-implicit Euler integration with softened potential.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        // Parameters
+        let G = 1;
+        let SOFTENING = 10;
+        let timeScale = 1;
+        let newBodyMass = 5;
+        let newBodyColor = '#00d4ff';
+        const dt = 0.5;
+
+        let bodies = [];
+        let trails = [];
+        let showTrails = true;
+        let showVectors = false;
+        let paused = false;
+        let time = 0;
+
+        // View transform
+        let viewX = 0, viewY = 0;
+        let zoom = 1;
+        let isDragging = false;
+        let dragStart = { x: 0, y: 0 };
+
+        class Body {
+            constructor(x, y, vx, vy, mass, color) {
+                this.x = x; this.y = y;
+                this.vx = vx; this.vy = vy;
+                this.mass = mass;
+                this.color = color;
+                this.ax = 0; this.ay = 0;
+            }
+            get radius() { return Math.max(2, Math.log(this.mass + 1) * 2.5); }
+        }
+
+        // Convert screen to world coordinates
+        function screenToWorld(sx, sy) {
+            return {
+                x: (sx - canvas.width / 2) / zoom + viewX,
+                y: (sy - canvas.height / 2) / zoom + viewY
+            };
+        }
+
+        // Convert world to screen coordinates
+        function worldToScreen(wx, wy) {
+            return {
+                x: (wx - viewX) * zoom + canvas.width / 2,
+                y: (wy - viewY) * zoom + canvas.height / 2
+            };
+        }
+
+        // Slider updates
+        document.getElementById('gravity').addEventListener('input', (e) => {
+            G = parseFloat(e.target.value);
+            document.getElementById('gVal').textContent = G.toFixed(2);
+        });
+        document.getElementById('timeScale').addEventListener('input', (e) => {
+            timeScale = parseFloat(e.target.value);
+            document.getElementById('timeVal').textContent = timeScale.toFixed(1);
+        });
+        document.getElementById('softening').addEventListener('input', (e) => {
+            SOFTENING = parseInt(e.target.value);
+            document.getElementById('softVal').textContent = SOFTENING;
+        });
+        document.getElementById('newMass').addEventListener('input', (e) => {
+            newBodyMass = parseInt(e.target.value);
+            document.getElementById('massVal').textContent = newBodyMass;
+        });
+
+        // Color picker
+        document.querySelectorAll('.color-swatch').forEach(swatch => {
+            swatch.addEventListener('click', () => {
+                document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
+                swatch.classList.add('active');
+                newBodyColor = swatch.dataset.color;
+            });
+        });
+
+        // Canvas interactions
+        canvas.addEventListener('click', (e) => {
+            if (isDragging) return;
+            const rect = canvas.getBoundingClientRect();
+            const { x, y } = screenToWorld(e.clientX - rect.left, e.clientY - rect.top);
+            addBody(x, y, 0, 0, newBodyMass, newBodyColor);
+        });
+
+        canvas.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+            const rect = canvas.getBoundingClientRect();
+            const { x, y } = screenToWorld(e.clientX - rect.left, e.clientY - rect.top);
+            addBody(x, y, 0, 0, 500, '#ffcc00'); // Massive star
+        });
+
+        canvas.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            const zoomFactor = e.deltaY > 0 ? 0.9 : 1.1;
+            zoom = Math.max(0.1, Math.min(5, zoom * zoomFactor));
+        });
+
+        canvas.addEventListener('mousedown', (e) => {
+            if (e.button === 1 || (e.button === 0 && e.shiftKey)) {
+                isDragging = true;
+                dragStart = { x: e.clientX, y: e.clientY };
+            }
+        });
+
+        canvas.addEventListener('mousemove', (e) => {
+            if (isDragging) {
+                viewX -= (e.clientX - dragStart.x) / zoom;
+                viewY -= (e.clientY - dragStart.y) / zoom;
+                dragStart = { x: e.clientX, y: e.clientY };
+            }
+        });
+
+        canvas.addEventListener('mouseup', () => { isDragging = false; });
+        canvas.addEventListener('mouseleave', () => { isDragging = false; });
+
+        function addBody(x, y, vx, vy, mass, color) {
+            bodies.push(new Body(x, y, vx, vy, mass, color));
+            trails.push([]);
+        }
+
+        // Control buttons
+        document.getElementById('btn-pause').addEventListener('click', (e) => {
+            paused = !paused;
+            e.target.textContent = paused ? 'PLAY' : 'PAUSE';
+            e.target.classList.toggle('active', paused);
+        });
+
+        document.getElementById('btn-clear').addEventListener('click', () => {
+            bodies = []; trails = []; time = 0;
+        });
+
+        document.getElementById('btn-trails').addEventListener('click', (e) => {
+            showTrails = !showTrails;
+            e.target.classList.toggle('active', showTrails);
+            if (!showTrails) trails = bodies.map(() => []);
+        });
+
+        document.getElementById('btn-vectors').addEventListener('click', (e) => {
+            showVectors = !showVectors;
+            e.target.classList.toggle('active', showVectors);
+        });
+
+        document.getElementById('btn-centerMass').addEventListener('click', () => {
+            if (bodies.length === 0) return;
+            let cx = 0, cy = 0, totalMass = 0;
+            bodies.forEach(b => {
+                cx += b.x * b.mass;
+                cy += b.y * b.mass;
+                totalMass += b.mass;
+            });
+            viewX = cx / totalMass;
+            viewY = cy / totalMass;
+        });
+
+        document.getElementById('btn-resetView').addEventListener('click', () => {
+            viewX = 0; viewY = 0; zoom = 1;
+        });
+
+        // Presets
+        const presets = {
+            random: () => initRandom(50),
+            binary: initBinary,
+            solar: initSolar,
+            cluster: initCluster,
+            collision: initCollision,
+            ring: initRing
+        };
+
+        document.querySelectorAll('.preset-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                presets[btn.dataset.preset]();
+                viewX = 0; viewY = 0; zoom = 1; time = 0;
+            });
+        });
+
+        function initRandom(n = 50) {
+            bodies = []; trails = [];
+            const cx = 0, cy = 0;
+            addBody(cx, cy, 0, 0, 1000, '#ffcc00');
+            for (let i = 0; i < n; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const r = 100 + Math.random() * 200;
+                const x = cx + r * Math.cos(angle);
+                const y = cy + r * Math.sin(angle);
+                const v = Math.sqrt(G * 1000 / r) * (0.8 + Math.random() * 0.4);
+                const vx = -v * Math.sin(angle);
+                const vy = v * Math.cos(angle);
+                const hue = 180 + Math.random() * 60;
+                addBody(x, y, vx, vy, 1 + Math.random() * 5, `hsl(${hue}, 80%, 60%)`);
+            }
+        }
+
+        function initBinary() {
+            bodies = []; trails = [];
+            const sep = 100, mass = 500;
+            const v = Math.sqrt(G * mass / (2 * sep)) * 0.7;
+            addBody(-sep, 0, 0, v, mass, '#ff6644');
+            addBody(sep, 0, 0, -v, mass, '#44aaff');
+            for (let i = 0; i < 30; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const r = 200 + Math.random() * 150;
+                const x = r * Math.cos(angle);
+                const y = r * Math.sin(angle);
+                const orbV = Math.sqrt(G * mass * 2 / r) * 0.95;
+                addBody(x, y, -orbV * Math.sin(angle), orbV * Math.cos(angle),
+                    1 + Math.random() * 3, `hsl(${180 + Math.random() * 40}, 70%, 60%)`);
+            }
+        }
+
+        function initSolar() {
+            bodies = []; trails = [];
+            addBody(0, 0, 0, 0, 2000, '#ffdd00');
+            const planets = [
+                { r: 60, m: 3, c: '#aa8866' }, { r: 100, m: 8, c: '#ffaa44' },
+                { r: 150, m: 10, c: '#4488ff' }, { r: 200, m: 6, c: '#ff4444' },
+                { r: 280, m: 50, c: '#ffcc88' }, { r: 350, m: 30, c: '#ddaa66' }
+            ];
+            planets.forEach(p => {
+                const angle = Math.random() * Math.PI * 2;
+                const v = Math.sqrt(G * 2000 / p.r);
+                addBody(p.r * Math.cos(angle), p.r * Math.sin(angle),
+                    -v * Math.sin(angle), v * Math.cos(angle), p.m, p.c);
+            });
+        }
+
+        function initCluster() {
+            bodies = []; trails = [];
+            for (let i = 0; i < 80; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const r = Math.random() * 200;
+                const v = 0.5;
+                const vAngle = Math.random() * Math.PI * 2;
+                addBody(r * Math.cos(angle), r * Math.sin(angle),
+                    v * Math.cos(vAngle), v * Math.sin(vAngle),
+                    5 + Math.random() * 20, `hsl(${Math.random() * 60 + 180}, 70%, 60%)`);
+            }
+        }
+
+        function initCollision() {
+            bodies = []; trails = [];
+            // Galaxy 1
+            addBody(-200, 0, 0.3, 0, 800, '#ff6644');
+            for (let i = 0; i < 40; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const r = 30 + Math.random() * 80;
+                const v = Math.sqrt(G * 800 / r) * 0.9;
+                addBody(-200 + r * Math.cos(angle), r * Math.sin(angle),
+                    0.3 - v * Math.sin(angle), v * Math.cos(angle),
+                    1 + Math.random() * 2, '#ff9966');
+            }
+            // Galaxy 2
+            addBody(200, 50, -0.3, 0, 600, '#44aaff');
+            for (let i = 0; i < 30; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const r = 30 + Math.random() * 60;
+                const v = Math.sqrt(G * 600 / r) * 0.9;
+                addBody(200 + r * Math.cos(angle), 50 + r * Math.sin(angle),
+                    -0.3 - v * Math.sin(angle), v * Math.cos(angle),
+                    1 + Math.random() * 2, '#66ccff');
+            }
+        }
+
+        function initRing() {
+            bodies = []; trails = [];
+            addBody(0, 0, 0, 0, 2000, '#ffcc00');
+            for (let i = 0; i < 100; i++) {
+                const angle = (i / 100) * Math.PI * 2 + Math.random() * 0.1;
+                const r = 180 + Math.random() * 40;
+                const v = Math.sqrt(G * 2000 / r);
+                addBody(r * Math.cos(angle), r * Math.sin(angle),
+                    -v * Math.sin(angle), v * Math.cos(angle),
+                    0.5 + Math.random(), `hsl(${30 + Math.random() * 30}, 60%, 70%)`);
+            }
+        }
+
+        function computeAccelerations() {
+            bodies.forEach(b => { b.ax = 0; b.ay = 0; });
+            for (let i = 0; i < bodies.length; i++) {
+                for (let j = i + 1; j < bodies.length; j++) {
+                    const bi = bodies[i], bj = bodies[j];
+                    const dx = bj.x - bi.x, dy = bj.y - bi.y;
+                    const distSq = dx * dx + dy * dy + SOFTENING * SOFTENING;
+                    const dist = Math.sqrt(distSq);
+                    const F = G * bi.mass * bj.mass / distSq;
+                    const fx = F * dx / dist, fy = F * dy / dist;
+                    bi.ax += fx / bi.mass; bi.ay += fy / bi.mass;
+                    bj.ax -= fx / bj.mass; bj.ay -= fy / bj.mass;
+                }
+            }
+        }
+
+        function update() {
+            if (!paused) {
+                const steps = Math.ceil(timeScale * 2);
+                for (let s = 0; s < steps; s++) {
+                    computeAccelerations();
+                    bodies.forEach((b, i) => {
+                        b.vx += b.ax * dt; b.vy += b.ay * dt;
+                        b.x += b.vx * dt; b.y += b.vy * dt;
+                        if (showTrails) {
+                            trails[i].push({ x: b.x, y: b.y });
+                            if (trails[i].length > 80) trails[i].shift();
+                        }
+                    });
+                }
+                time += dt * steps;
+            }
+            draw();
+            requestAnimationFrame(update);
+        }
+
+        function draw() {
+            ctx.fillStyle = '#000';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Stars background
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+            for (let i = 0; i < 80; i++) {
+                ctx.fillRect((i * 73 + viewX * 0.1) % canvas.width,
+                    (i * 137 + viewY * 0.1) % canvas.height, 1, 1);
+            }
+
+            // Trails
+            if (showTrails) {
+                trails.forEach((trail, i) => {
+                    if (trail.length > 1 && bodies[i]) {
+                        ctx.beginPath();
+                        const start = worldToScreen(trail[0].x, trail[0].y);
+                        ctx.moveTo(start.x, start.y);
+                        for (let j = 1; j < trail.length; j++) {
+                            const pt = worldToScreen(trail[j].x, trail[j].y);
+                            ctx.lineTo(pt.x, pt.y);
+                        }
+                        ctx.strokeStyle = bodies[i].color.replace(')', ', 0.3)').replace('hsl', 'hsla').replace('rgb', 'rgba').replace('#', 'rgba(').replace(/([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})/gi, (m, r, g, b) => `${parseInt(r, 16)}, ${parseInt(g, 16)}, ${parseInt(b, 16)}, 0.3)`);
+                        ctx.lineWidth = 1;
+                        ctx.stroke();
+                    }
+                });
+            }
+
+            // Bodies
+            bodies.forEach(b => {
+                const { x, y } = worldToScreen(b.x, b.y);
+                const r = b.radius * zoom;
+
+                if (x > -r && x < canvas.width + r && y > -r && y < canvas.height + r) {
+                    // Velocity vectors
+                    if (showVectors) {
+                        const vScale = 20;
+                        ctx.beginPath();
+                        ctx.moveTo(x, y);
+                        ctx.lineTo(x + b.vx * vScale, y + b.vy * vScale);
+                        ctx.strokeStyle = 'rgba(255, 100, 100, 0.6)';
+                        ctx.lineWidth = 1;
+                        ctx.stroke();
+                    }
+
+                    ctx.beginPath();
+                    ctx.arc(x, y, Math.max(1, r), 0, Math.PI * 2);
+                    ctx.fillStyle = b.color;
+                    ctx.shadowColor = b.color;
+                    ctx.shadowBlur = 8;
+                    ctx.fill();
+                    ctx.shadowBlur = 0;
+                }
+            });
+
+            // Stats
+            document.getElementById('bodyCount').textContent = bodies.length;
+            document.getElementById('simTime').textContent = time.toFixed(1);
+            let ke = 0;
+            bodies.forEach(b => ke += 0.5 * b.mass * (b.vx * b.vx + b.vy * b.vy));
+            document.getElementById('kineticEnergy').textContent = ke.toFixed(0);
+        }
+
+        // Initialize
+        initRandom(50);
+        update();
+    </script>
+</body>
+
+</html>

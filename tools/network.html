@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Network Radar | Aryan Kumar</title>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime&family=Inter:wght@400;600&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg: #050505;
+            --accent: #00d4ff;
+            --accent-dim: rgba(0, 212, 255, 0.3);
+            --text: #e0e0e0;
+            --dim: #555;
+            --mono: 'Courier Prime', monospace;
+            --green: #39ff14;
+            --red: #ff3366;
+            --yellow: #ffcc00;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+        }
+
+        header {
+            padding: 1rem 2rem;
+            border-bottom: 1px solid #222;
+            background: rgba(5, 5, 5, 0.9);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .title {
+            font-family: var(--mono);
+            color: var(--accent);
+            font-size: 0.9rem;
+        }
+
+        .back-btn {
+            color: var(--dim);
+            text-decoration: none;
+            font-family: var(--mono);
+            font-size: 0.8rem;
+            border: 1px solid #333;
+            padding: 8px 16px;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .container {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            height: calc(100vh - 70px);
+        }
+
+        @media (max-width: 900px) {
+            .container {
+                flex-direction: column;
+                height: auto;
+            }
+        }
+
+        .radar-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #radar {
+            width: 100%;
+            height: 400px;
+            background: #0a0a0a;
+            border: 1px solid #333;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .radar-grid {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at center, transparent 0%, transparent 20%, rgba(0, 212, 255, 0.05) 20.5%, transparent 21%),
+                radial-gradient(circle at center, transparent 0%, transparent 40%, rgba(0, 212, 255, 0.05) 40.5%, transparent 41%),
+                radial-gradient(circle at center, transparent 0%, transparent 60%, rgba(0, 212, 255, 0.05) 60.5%, transparent 61%),
+                radial-gradient(circle at center, transparent 0%, transparent 80%, rgba(0, 212, 255, 0.05) 80.5%, transparent 81%);
+        }
+
+        .radar-sweep {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 50%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent), transparent);
+            transform-origin: left center;
+            animation: sweep 4s linear infinite;
+        }
+
+        @keyframes sweep {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .packet {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            animation: pulse 1s ease-out forwards;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(0);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(3);
+                opacity: 0;
+            }
+        }
+
+        .panel {
+            width: 320px;
+            background: rgba(10, 10, 10, 0.8);
+            border: 1px solid #333;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        @media (max-width: 900px) {
+            .panel {
+                width: 100%;
+                max-height: 400px;
+            }
+        }
+
+        .panel-title {
+            font-family: var(--mono);
+            color: var(--accent);
+            font-size: 0.75rem;
+            border-bottom: 1px solid #333;
+            padding-bottom: 0.5rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+        }
+
+        .stat-box {
+            background: #111;
+            padding: 0.75rem;
+            border: 1px solid #222;
+        }
+
+        .stat-label {
+            font-size: 0.6rem;
+            color: var(--dim);
+            font-family: var(--mono);
+        }
+
+        .stat-value {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-top: 0.25rem;
+        }
+
+        .stat-value.green {
+            color: var(--green);
+        }
+
+        .stat-value.red {
+            color: var(--red);
+        }
+
+        .stat-value.yellow {
+            color: var(--yellow);
+        }
+
+        .log-container {
+            flex: 1;
+            overflow-y: auto;
+            background: #0a0a0a;
+            border: 1px solid #222;
+            font-family: var(--mono);
+            font-size: 0.65rem;
+        }
+
+        .log-entry {
+            padding: 0.4rem 0.6rem;
+            border-bottom: 1px solid #1a1a1a;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .log-time {
+            color: var(--dim);
+        }
+
+        .log-proto {
+            padding: 1px 4px;
+            font-size: 0.6rem;
+        }
+
+        .log-proto.tcp {
+            background: rgba(0, 212, 255, 0.2);
+            color: var(--accent);
+        }
+
+        .log-proto.udp {
+            background: rgba(57, 255, 20, 0.2);
+            color: var(--green);
+        }
+
+        .log-proto.http {
+            background: rgba(255, 204, 0, 0.2);
+            color: var(--yellow);
+        }
+
+        .log-proto.https {
+            background: rgba(255, 51, 102, 0.2);
+            color: var(--red);
+        }
+
+        .log-addr {
+            color: #888;
+        }
+
+        .btn-row {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        button {
+            flex: 1;
+            background: transparent;
+            border: 1px solid #333;
+            color: var(--dim);
+            padding: 8px;
+            font-family: var(--mono);
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        button.active {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .disclaimer {
+            font-size: 0.65rem;
+            color: var(--dim);
+            margin-top: 1rem;
+            padding-top: 0.5rem;
+            border-top: 1px solid #222;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <span class="title">>> NETWORK_RADAR</span>
+        <a href="../index.html" class="back-btn">[ ← BACK ]</a>
+    </header>
+
+    <div class="container">
+        <div class="radar-section">
+            <div id="radar">
+                <div class="radar-grid"></div>
+                <div class="radar-sweep"></div>
+            </div>
+
+            <div class="btn-row">
+                <button id="btn-start" class="active">START</button>
+                <button id="btn-stop">STOP</button>
+                <button id="btn-clear">CLEAR</button>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-title">>> STATISTICS</div>
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-label">PACKETS/SEC</div>
+                    <div class="stat-value green" id="pps">0</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">TOTAL</div>
+                    <div class="stat-value" id="total">0</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">TCP</div>
+                    <div class="stat-value" style="color: var(--accent)" id="tcp">0</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">UDP</div>
+                    <div class="stat-value green" id="udp">0</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">HTTP</div>
+                    <div class="stat-value yellow" id="http">0</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">HTTPS</div>
+                    <div class="stat-value red" id="https">0</div>
+                </div>
+            </div>
+
+            <div class="panel-title">>> PACKET LOG</div>
+            <div class="log-container" id="log"></div>
+
+            <div class="disclaimer">
+                ⚠️ <strong>Simulation Only</strong> - This visualizes simulated network traffic for demonstration
+                purposes.
+                Real packet capture requires OS-level permissions and specialized tools like Wireshark.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const radar = document.getElementById('radar');
+        const log = document.getElementById('log');
+
+        const protocols = ['TCP', 'UDP', 'HTTP', 'HTTPS'];
+        const ports = { TCP: [22, 23, 25, 110, 143], UDP: [53, 67, 68, 123, 161], HTTP: [80, 8080], HTTPS: [443, 8443] };
+        const domains = ['google.com', 'github.com', 'cloudflare.com', 'aws.amazon.com', 'api.stripe.com', 'cdn.jsdelivr.net'];
+
+        let running = true;
+        let stats = { total: 0, pps: 0, TCP: 0, UDP: 0, HTTP: 0, HTTPS: 0 };
+        let packetsThisSecond = 0;
+
+        function randomIP() {
+            return `${Math.floor(Math.random() * 223) + 1}.${Math.floor(Math.random() * 256)}.${Math.floor(Math.random() * 256)}.${Math.floor(Math.random() * 256)}`;
+        }
+
+        function createPacket() {
+            const proto = protocols[Math.floor(Math.random() * protocols.length)];
+            const port = ports[proto][Math.floor(Math.random() * ports[proto].length)];
+            const srcIP = randomIP();
+            const destIP = Math.random() > 0.5 ? randomIP() : domains[Math.floor(Math.random() * domains.length)];
+
+            // Radar visualization
+            const angle = Math.random() * Math.PI * 2;
+            const distance = 30 + Math.random() * 150;
+            const x = radar.offsetWidth / 2 + Math.cos(angle) * distance;
+            const y = radar.offsetHeight / 2 + Math.sin(angle) * distance;
+
+            const dot = document.createElement('div');
+            dot.className = 'packet';
+            dot.style.left = x + 'px';
+            dot.style.top = y + 'px';
+            dot.style.background = proto === 'TCP' ? '#00d4ff' : proto === 'UDP' ? '#39ff14' : proto === 'HTTP' ? '#ffcc00' : '#ff3366';
+            radar.appendChild(dot);
+            setTimeout(() => dot.remove(), 1000);
+
+            // Log entry
+            const time = new Date().toLocaleTimeString('en-GB', { hour12: false });
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            entry.innerHTML = `
+                <span class="log-time">${time}</span>
+                <span class="log-proto ${proto.toLowerCase()}">${proto}</span>
+                <span class="log-addr">${srcIP}:${port} → ${destIP}</span>
+            `;
+            log.insertBefore(entry, log.firstChild);
+            if (log.children.length > 100) log.lastChild.remove();
+
+            // Stats
+            stats.total++;
+            stats[proto]++;
+            packetsThisSecond++;
+        }
+
+        function updateStats() {
+            document.getElementById('total').textContent = stats.total;
+            document.getElementById('pps').textContent = packetsThisSecond;
+            document.getElementById('tcp').textContent = stats.TCP;
+            document.getElementById('udp').textContent = stats.UDP;
+            document.getElementById('http').textContent = stats.HTTP;
+            document.getElementById('https').textContent = stats.HTTPS;
+            packetsThisSecond = 0;
+        }
+
+        let packetInterval;
+        function start() {
+            running = true;
+            packetInterval = setInterval(() => {
+                if (running) {
+                    const burst = Math.floor(Math.random() * 3) + 1;
+                    for (let i = 0; i < burst; i++) createPacket();
+                }
+            }, 200);
+        }
+
+        document.getElementById('btn-start').addEventListener('click', (e) => {
+            if (!running) { start(); e.target.classList.add('active'); document.getElementById('btn-stop').classList.remove('active'); }
+        });
+        document.getElementById('btn-stop').addEventListener('click', (e) => {
+            running = false; clearInterval(packetInterval);
+            e.target.classList.add('active'); document.getElementById('btn-start').classList.remove('active');
+        });
+        document.getElementById('btn-clear').addEventListener('click', () => {
+            log.innerHTML = '';
+            stats = { total: 0, pps: 0, TCP: 0, UDP: 0, HTTP: 0, HTTPS: 0 };
+            updateStats();
+        });
+
+        setInterval(updateStats, 1000);
+        start();
+    </script>
+</body>
+
+</html>
