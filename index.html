@@ -4,71 +4,158 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aryan Kumar | COMPUTER SCIENCE ENGINEERING</title>
-    <link rel="stylesheet" href="css/core.css">
+    <title>Aryan Kumar | Software Engineer & Creative</title>
+
+    <!-- Modern Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+
+    <!-- Icons (Lucide or similar via CDN, using FontAwesome for simplicity here) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
-    <div class="noise-overlay"></div>
-    <div id="cursor-light"></div>
-    <div class="flashlight-layer"></div>
-    <div class="scanline"></div>
 
     <nav>
-        <div class="nav-top">
-            <div class="identity">
-                <h1 id="typewriter-text" class="typing-cursor glitch-hover"></h1>
-                <p id="mode-label">INITIALIZING...</p>
+        <div class="container nav-container">
+            <a href="#" class="nav-logo">AK.</a>
+            <div class="nav-links">
+                <a href="#about" class="magnetic-wrap">About</a>
+                <a href="#projects" class="magnetic-wrap">Projects</a>
+                <a href="#tools" class="magnetic-wrap">Tools</a>
             </div>
-            <button class="hamburger" id="hamburger" aria-label="Menu">
-                <span></span><span></span><span></span>
-            </button>
-        </div>
-
-        <div class="controls" id="nav-controls">
-            <button id="btn-eng">[ ENGINEERING ]</button>
-            <button id="btn-vfx">[ VFX / EDIT ]</button>
-            <button id="btn-tools">[ TOOLS ]</button>
-            <button id="btn-contact">[ CONTACT ]</button>
-            <a id="resume-btn" href="#" target="_blank" class="resume-link">[ DOWNLOAD RESUME ]</a>
         </div>
     </nav>
 
-    <div class="main-stage">
-        <main id="content-area">
-        </main>
+    <main>
+        <!-- Custom Cursor Follower (optional minimal dot) -->
+        <div id="cursor-dot" class="cursor-dot"></div>
 
-        <aside class="reactor-container">
-            <div class="reactor">
-                <div class="circle outer"></div>
-                <div class="circle inner"></div>
-                <div class="core"></div>
+        <section id="hero" class="container">
+            <div class="hero-sub reveal">
+                <div class="dot"></div>
+                <span class="text-mono">Available for new opportunities</span>
             </div>
-        </aside>
-    </div>
 
-    <div id="contact-modal" class="modal-overlay hidden">
-        <div class="modal-window">
-            <div class="modal-header">
-                <span>>> SECURE_UPLINK</span>
-                <button id="close-contact">[ X ]</button>
+            <h1 class="display-title reveal" style="transition-delay: 100ms;">
+                Aryan<br>Kumar.
+            </h1>
+
+            <p class="hero-roles reveal" style="transition-delay: 200ms;">
+                Software Engineer bridging the gap between high-performance systems and cinematic visual narratives.
+            </p>
+        </section>
+
+        <!-- Bento Box About Section -->
+        <section id="about" class="container">
+            <h2 class="section-title reveal">Profile.</h2>
+
+            <div class="bento-grid">
+                <!-- Main Bio (Large) -->
+                <div class="bento-card bento-large reveal">
+                    <h3>About Me</h3>
+                    <p style="font-size: 1.1rem; line-height: 1.6;">
+                        I am a Computer Science Engineering student based in New Delhi, India.
+                        I specialize in building robust software architectures and interactive physics simulations.
+                        <br><br>
+                        Beyond traditional software engineering, I am a VFX artist and video editor,
+                        crafting compelling cinematic experiences using After Effects and Premiere Pro.
+                        This dual expertise allows me to think structurally while designing visually.
+                    </p>
+                    <div class="bento-content-bottom">
+                        <a href="mailto:ak24682212@gmail.com" class="magnetic-wrap"
+                            style="color: var(--text-primary); text-decoration: none; display: flex; align-items: center; gap: 0.5rem; font-weight: 500;">
+                            Say Hello <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Location (Square) -->
+                <div class="bento-card reveal"
+                    style="transition-delay: 100ms; display: flex; align-items: center; justify-content: center; text-align: center;">
+                    <div>
+                        <i class="fa-solid fa-earth-asia"
+                            style="font-size: 3rem; margin-bottom: 1rem; color: var(--text-secondary);"></i>
+                        <h3 style="margin-bottom: 0;">New Delhi</h3>
+                        <p class="text-mono" style="margin-top: 0.5rem;">India</p>
+                    </div>
+                </div>
+
+                <!-- Connect (Square) -->
+                <div class="bento-card reveal" style="transition-delay: 200ms; background: var(--accent);">
+                    <h3 style="color: white;">Connect</h3>
+                    <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                        <a href="https://github.com/aryank2212" target="_blank" style="color: white; font-size: 1.5rem;"
+                            class="magnetic-wrap"><i class="fa-brands fa-github"></i></a>
+                        <a href="https://www.linkedin.com/in/aryan-kumar-rajput-13b308343/" target="_blank"
+                            style="color: white; font-size: 1.5rem;" class="magnetic-wrap"><i
+                                class="fa-brands fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+
+                <!-- Skills (Wide) -->
+                <div class="bento-card bento-wide reveal" style="transition-delay: 300ms;">
+                    <h3>Core Stack</h3>
+                    <div style="margin-top: 1rem;">
+                        <span class="skill-pill">C / C++</span>
+                        <span class="skill-pill">Node.js</span>
+                        <span class="skill-pill">Python</span>
+                        <span class="skill-pill">System Design</span>
+                        <span class="skill-pill">LLM Integrations</span>
+                        <span class="skill-pill">After Effects</span>
+                        <span class="skill-pill">Premiere Pro</span>
+                    </div>
+                </div>
             </div>
-            <div class="modal-body" id="contact-content">
+        </section>
+
+        <!-- Projects List Section -->
+        <section id="projects" class="container">
+            <div class="projects-header reveal">
+                <h2 class="section-title" style="margin-bottom: 0;">Selected Work.</h2>
+                <div class="filter-wrapper">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="eng">Engineering</button>
+                    <button class="filter-btn" data-filter="vfx">VFX</button>
+                </div>
             </div>
-        </div>
-    </div>
 
-    <footer class="system-status">
-        <div class="left">
-            <span class="status-light"></span>SYSTEM: ONLINE
-        </div>
-        <div class="right">
-            POS: <span id="cursor-pos">X:000 Y:000</span> :: LOC: DEL :: <span id="clock">00:00:00</span>
-        </div>
-    </footer>
+            <div class="project-list" id="project-list">
+                <!-- Populated by JS -->
+            </div>
+        </section>
 
-    <script src="js/data.js"></script>
-    <script src="js/app.js"></script>
+        <!-- Tools Grid Section -->
+        <section id="tools" class="container">
+            <h2 class="section-title reveal">Simulations & Tools.</h2>
+            <div class="tools-grid" id="tools-grid">
+                <!-- Populated by JS -->
+            </div>
+        </section>
+
+        <!-- Minimal Footer CTA -->
+        <footer class="container footer-cta reveal">
+            <div class="cta-link-wrapper">
+                <a href="mailto:ak24682212@gmail.com" class="cta-link magnetic-wrap">Let's Talk ↗</a>
+            </div>
+
+            <div class="footer-bottom">
+                <span>&copy; 2026 Aryan Kumar.</span>
+                <div class="socials">
+                    <a href="https://github.com/aryank2212" target="_blank">GitHub</a>
+                    <a href="https://www.linkedin.com/in/aryan-kumar-rajput-13b308343/" target="_blank">LinkedIn</a>
+                </div>
+            </div>
+        </footer>
+    </main>
+
+    <!-- JS Logic -->
+    <script src="js/main.js"></script>
 </body>
 
 </html>
