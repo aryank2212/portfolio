@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://aryanrajput.dev/sitemap.xml

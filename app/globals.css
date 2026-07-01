@@ -1,0 +1,126 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg: #07080c;
+  --color-surface: #0b0d14;
+  --color-card: #10131c;
+  --color-line: rgba(148, 163, 184, 0.08);
+  --color-cyan: #22d3ee;
+  --color-cyan-dim: rgba(34, 211, 238, 0.15);
+  --color-amber: #f59e0b;
+  --color-emerald: #34d399;
+  --color-muted: #94a3b8;
+  --color-body: #e2e8f0;
+
+  --font-display: var(--font-grotesk);
+  --font-body: var(--font-inter);
+  --font-mono: var(--font-jetbrains);
+
+  --animate-marquee: marquee 40s linear infinite;
+  --animate-marquee-reverse: marquee-reverse 34s linear infinite;
+
+  @keyframes marquee {
+    to { transform: translateX(-50%); }
+  }
+  @keyframes marquee-reverse {
+    from { transform: translateX(-50%); }
+    to { transform: translateX(0); }
+  }
+}
+
+html { 
+  /* Lenis owns scroll behavior, do not set scroll-behavior: smooth here */
+  background: var(--color-bg);
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-body);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+h1, h2, h3 { 
+  font-family: var(--font-display); 
+  letter-spacing: -0.02em; 
+}
+
+/* Custom Modality-Aware Cursor hiding */
+@media (pointer: fine) {
+  body[data-cursor-modality="mouse"], 
+  body[data-cursor-modality="mouse"] * { 
+    cursor: none !important; 
+  }
+}
+
+/* Accessibility: visible focus rings */
+:focus-visible {
+  outline: 2px solid var(--color-cyan);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Skip link */
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -100%;
+  z-index: 200;
+  background: var(--color-cyan);
+  color: #000;
+  padding: 0.6rem 1.2rem;
+  border-radius: 0.5rem;
+  font-size: 0.85rem;
+  font-family: var(--font-mono);
+  font-weight: 600;
+}
+.skip-link:focus { top: 1rem; }
+
+/* Film grain via filter on a specific element or canvas, NOT fixed full screen */
+.grain-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* 1px scanline dividers */
+.scanline-divider {
+  height: 1px;
+  width: 100%;
+  background: linear-gradient(90deg, transparent, rgba(34, 211, 238, 0.15), transparent);
+}
+
+/* Glass */
+.glass {
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Shimmer text */
+.text-shine {
+  background: linear-gradient(110deg, #fff 35%, #22d3ee 50%, #fff 65%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shine 6s linear infinite;
+}
+@keyframes shine {
+  to { background-position: -200% center; }
+}
+
+::selection { background: var(--color-cyan); color: #000; }
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
