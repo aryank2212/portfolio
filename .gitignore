@@ -20,3 +20,6 @@ npm-debug.log*
 
 # claude
 claude_prev.txt
+.claude/
+Instructions.md
+.gitlab-ci.yml
